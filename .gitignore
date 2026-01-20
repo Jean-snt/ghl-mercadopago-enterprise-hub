@@ -1,0 +1,412 @@
+# ============================================
+# MERCADOPAGO ENTERPRISE - GITIGNORE
+# ============================================
+
+# ============================================
+# ARCHIVOS SENSIBLES Y SECRETOS
+# ============================================
+
+# Variables de entorno con credenciales
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# Archivos de configuración con secretos
+config.json
+secrets.json
+credentials.json
+
+# Claves y certificados
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+
+# ============================================
+# BASE DE DATOS
+# ============================================
+
+# Base de datos SQLite
+*.db
+*.sqlite
+*.sqlite3
+mercadopago_enterprise.db
+test.db
+
+# Archivos de migración temporales
+migrations/versions/*.pyc
+alembic.ini
+
+# ============================================
+# ENTORNOS VIRTUALES PYTHON
+# ============================================
+
+# Virtualenv
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# Conda
+.conda/
+
+# ============================================
+# PYTHON CACHE Y TEMPORALES
+# ============================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ============================================
+# LOGS Y ARCHIVOS TEMPORALES
+# ============================================
+
+# Logs del sistema
+logs/
+*.log
+*.log.*
+*.out
+*.err
+
+# Archivos temporales
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Archivos de respaldo
+*.bak
+*.backup
+*.old
+*.orig
+*.swp
+*.swo
+*~
+
+# ============================================
+# REPORTES Y ARCHIVOS GENERADOS
+# ============================================
+
+# Reportes de verificación (contienen datos sensibles)
+FINAL_VERIFICATION_*.json
+verification_*.json
+report_*.json
+report_*.csv
+
+# Reportes de reconciliación
+reports/reconciliation_*.csv
+reports/reconciliation_*.json
+reports/*.csv
+reports/*.json
+
+# Archivos de exportación
+exports/
+*.export
+*.dump
+
+# ============================================
+# SISTEMA OPERATIVO
+# ============================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================
+# EDITORES E IDEs
+# ============================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ============================================
+# HERRAMIENTAS DE DESARROLLO
+# ============================================
+
+# Node.js (si se usa para frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# ============================================
+# ARCHIVOS ESPECÍFICOS DEL PROYECTO
+# ============================================
+
+# Archivos de prueba con datos reales
+test_data_real.json
+production_test.py
+real_credentials.py
+
+# Archivos de configuración local
+local_config.py
+dev_settings.py
+prod_settings.py
+
+# Archivos de migración de datos
+migration_data/
+data_backup/
+old_data/
+
+# Archivos de monitoreo con datos sensibles
+monitoring_data/
+metrics_backup/
+alert_history/
+
+# ============================================
+# ARCHIVOS DE TERCEROS
+# ============================================
+
+# Librerías descargadas
+vendor/
+third_party/
+
+# Archivos de dependencias
+requirements-dev.txt
+requirements-prod.txt
+requirements-local.txt
+
+# ============================================
+# COMENTARIOS IMPORTANTES
+# ============================================
+
+# NOTA: Este .gitignore protege:
+# 1. Credenciales y secretos (.env, claves, certificados)
+# 2. Base de datos con datos reales (*.db, *.sqlite)
+# 3. Entornos virtuales (venv/, env/)
+# 4. Archivos temporales y logs
+# 5. Reportes con datos sensibles
+# 6. Configuraciones locales
+
+# RECUERDA:
+# - Nunca commitear archivos con credenciales reales
+# - Usar .env.example para mostrar la estructura
+# - Mantener backups seguros de la base de datos
+# - Revisar este archivo periódicamente
+
+# ============================================
+# ARCHIVOS QUE SÍ SE DEBEN INCLUIR
+# ============================================
+
+# Estos archivos SÍ deben estar en el repositorio:
+# - .env.example (plantilla sin credenciales)
+# - requirements.txt (dependencias)
+# - README.md (documentación)
+# - scripts/ (herramientas de gestión)
+# - tests/ (pruebas automatizadas)
+# - static/ (archivos web estáticos)
+# - services/ (código de servicios)
+# - models.py (modelos de datos)
+# - main.py (aplicación principal)

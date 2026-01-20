@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Cliente - MercadoPago Enterprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-user-circle text-3xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold" id="clientTitle">Dashboard Cliente</h1>
+                        <p class="text-blue-100" id="clientSubtitle">Cargando información...</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-sm text-blue-100">Última actualización</p>
+                        <p class="text-white font-semibold" id="lastUpdate">--:--</p>
+                    </div>
+                    <a href="/dashboard" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
+                        <i class="fas fa-arrow-left mr-2"></i>Dashboard General
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Información del Cliente -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8 card-hover">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-info-circle text-blue-500 mr-3"></i>Información del Cliente
+                </h2>
+                <div class="flex space-x-2">
+                    <span id="clientStatus" class="px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-spinner fa-spin mr-1"></i>Cargando...
+                    </span>
+                    <span id="ghlStatus" class="px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-spinner fa-spin mr-1"></i>Verificando GHL...
+                    </span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-user mr-2 text-blue-500"></i>Cliente
+                    </h3>
+                    <p class="text-gray-900" id="clientName">--</p>
+                    <p class="text-gray-600 text-sm" id="clientEmail">--</p>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-building mr-2 text-green-500"></i>Empresa
+                    </h3>
+                    <p class="text-gray-900" id="companyName">--</p>
+                    <p class="text-gray-600 text-sm" id="subscriptionPlan">--</p>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-map-marker-alt mr-2 text-purple-500"></i>GoHighLevel
+                    </h3>
+                    <p class="text-gray-900" id="ghlLocationId">--</p>
+                    <p class="text-gray-600 text-sm" id="ghlTokenStatus">--</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas del Cliente -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Total Pagos</p>
+                        <p class="text-3xl font-bold text-blue-600" id="totalPayments">0</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-credit-card text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Monto Total</p>
+                        <p class="text-3xl font-bold text-green-600" id="totalAmount">$0</p>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Pagos Aprobados</p>
+                        <p class="text-3xl font-bold text-emerald-600" id="approvedPayments">0</p>
+                    </div>
+                    <div class="bg-emerald-100 p-3 rounded-full">
+                        <i class="fas fa-check-circle text-emerald-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Límite Mensual</p>
+                        <p class="text-3xl font-bold text-purple-600" id="monthlyLimit">∞</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full">
+                        <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-bolt text-yellow-500 mr-3"></i>Acciones Rápidas
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Generar Link de Pago -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-all">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-link text-blue-500 mr-2"></i>Generar Link de Pago de Prueba
+                    </h3>
+                    
+                    <form id="paymentForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email Cliente</label>
+                                <input type="email" id="customerEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="cliente@ejemplo.com" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Cliente</label>
+                                <input type="text" id="customerName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Juan Pérez">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Monto (USD)</label>
+                                <input type="number" id="amount" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="100.00" step="0.01" min="0.01" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ID Contacto GHL</label>
+                                <input type="text" id="ghlContactId" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="ghl_contact_123" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                            <input type="text" id="description" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Pago de prueba" required>
+                        </div>
+                        
+                        <button type="submit" id="generatePaymentBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all">
+                            <i class="fas fa-magic mr-2"></i>Generar Link de Pago
+                        </button>
+                    </form>
+                    
+                    <!-- Resultado del link generado -->
+                    <div id="paymentResult" class="mt-4 hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">
+                                <i class="fas fa-check-circle mr-2"></i>Link Generado Exitosamente
+                            </h4>
+                            <div class="space-y-2">
+                                <p class="text-sm text-green-700">
+                                    <strong>Payment ID:</strong> <span id="resultPaymentId">--</span>
+                                </p>
+                                <p class="text-sm text-green-700">
+                                    <strong>Checkout URL:</strong>
+                                </p>
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" id="resultCheckoutUrl" class="flex-1 px-3 py-2 bg-white border border-green-300 rounded text-sm" readonly>
+                                    <button onclick="copyToClipboard('resultCheckoutUrl')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Probar Conexión GHL -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-green-400 transition-all">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-plug text-green-500 mr-2"></i>Probar Conexión GoHighLevel
+                    </h3>
+                    
+                    <p class="text-gray-600 mb-4">Verifica que la integración con GoHighLevel esté funcionando correctamente.</p>
+                    
+                    <button id="testGhlBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all">
+                        <i class="fas fa-satellite-dish mr-2"></i>Probar Conexión
+                    </button>
+                    
+                    <div id="ghlTestResult" class="mt-4 hidden">
+                        <!-- Resultado se llenará dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Pagos del Cliente -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-list text-indigo-500 mr-3"></i>Pagos del Cliente
+                </h2>
+                <button onclick="refreshPayments()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-all">
+                    <i class="fas fa-sync-alt mr-2"></i>Actualizar
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Cliente</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Monto</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Estado</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Contacto GHL</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Fecha</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTableBody">
+                        <tr>
+                            <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                                <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                                <p>Cargando pagos del cliente...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentClientId = null;
+        const adminToken = 'junior123'; // En producción esto vendría de autenticación
+
+        // Obtener client_id de la URL
+        function getClientIdFromUrl() {
+            const pathParts = window.location.pathname.split('/');
+            const clientIndex = pathParts.indexOf('client');
+            if (clientIndex !== -1 && pathParts[clientIndex + 1]) {
+                return pathParts[clientIndex + 1];
+            }
+            return null;
+        }
+
+        // Inicializar dashboard
+        async function initDashboard() {
+            currentClientId = getClientIdFromUrl();
+            
+            if (!currentClientId) {
+                alert('ID de cliente no encontrado en la URL');
+                window.location.href = '/dashboard';
+                return;
+            }
+
+            document.getElementById('clientTitle').textContent = `Dashboard - ${currentClientId}`;
+            
+            await loadClientInfo();
+            await loadClientMetrics();
+            await loadClientPayments();
+            
+            updateLastUpdate();
+            setInterval(updateLastUpdate, 30000); // Actualizar cada 30 segundos
+        }
+
+        // Cargar información del cliente
+        async function loadClientInfo() {
+            try {
+                const response = await fetch(`/oauth/ghl/status/${currentClientId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Actualizar información básica
+                    document.getElementById('clientName').textContent = data.client_name || currentClientId;
+                    document.getElementById('clientEmail').textContent = data.client_email || 'No especificado';
+                    document.getElementById('companyName').textContent = data.company_name || 'No especificado';
+                    document.getElementById('subscriptionPlan').textContent = `Plan: ${data.account_status?.subscription_plan || 'basic'}`;
+                    document.getElementById('ghlLocationId').textContent = data.ghl_integration?.location_id || 'No conectado';
+                    
+                    // Estado del cliente
+                    const clientStatus = document.getElementById('clientStatus');
+                    if (data.account_status?.is_active) {
+                        clientStatus.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800';
+                        clientStatus.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Activo';
+                    } else {
+                        clientStatus.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800';
+                        clientStatus.innerHTML = '<i class="fas fa-times-circle mr-1"></i>Inactivo';
+                    }
+                    
+                    // Estado de GHL
+                    const ghlStatus = document.getElementById('ghlStatus');
+                    if (data.ghl_integration?.connected) {
+                        ghlStatus.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800';
+                        ghlStatus.innerHTML = '<i class="fas fa-link mr-1"></i>GHL Conectado';
+                        
+                        const tokenExpired = data.ghl_integration?.token_expired;
+                        document.getElementById('ghlTokenStatus').textContent = tokenExpired ? 'Token expirado' : 'Token válido';
+                    } else {
+                        ghlStatus.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-gray-800';
+                        ghlStatus.innerHTML = '<i class="fas fa-unlink mr-1"></i>GHL Desconectado';
+                        document.getElementById('ghlTokenStatus').textContent = 'No conectado';
+                    }
+                    
+                    document.getElementById('clientSubtitle').textContent = `${data.company_name || 'Empresa'} - ${data.ghl_integration?.location_id || 'Sin GHL'}`;
+                    
+                } else {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Error cargando información del cliente:', error);
+                document.getElementById('clientSubtitle').textContent = 'Error cargando información';
+            }
+        }
+
+        // Cargar métricas del cliente
+        async function loadClientMetrics() {
+            try {
+                const response = await fetch(`/api/v1/clients/${currentClientId}/metrics`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    document.getElementById('totalPayments').textContent = data.total_payments || 0;
+                    document.getElementById('totalAmount').textContent = `$${data.total_amount || 0}`;
+                    document.getElementById('approvedPayments').textContent = data.approved_payments || 0;
+                    document.getElementById('monthlyLimit').textContent = data.monthly_limit || '∞';
+                } else {
+                    console.error('Error cargando métricas del cliente');
+                }
+            } catch (error) {
+                console.error('Error cargando métricas:', error);
+            }
+        }
+
+        // Cargar pagos del cliente
+        async function loadClientPayments() {
+            try {
+                const response = await fetch(`/api/v1/clients/${currentClientId}/payments`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    renderPaymentsTable(data.payments || []);
+                } else {
+                    console.error('Error cargando pagos del cliente');
+                    renderPaymentsTable([]);
+                }
+            } catch (error) {
+                console.error('Error cargando pagos:', error);
+                renderPaymentsTable([]);
+            }
+        }
+
+        // Renderizar tabla de pagos
+        function renderPaymentsTable(payments) {
+            const tbody = document.getElementById('paymentsTableBody');
+            
+            if (payments.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                            <i class="fas fa-inbox text-2xl mb-2"></i>
+                            <p>No hay pagos para este cliente</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = payments.map(payment => `
+                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                    <td class="px-4 py-3 text-sm font-mono">${payment.id}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <div>
+                            <p class="font-medium">${payment.customer_name || 'N/A'}</p>
+                            <p class="text-gray-500">${payment.customer_email}</p>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 text-sm font-semibold">$${payment.expected_amount}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold ${getStatusClass(payment.status)}">
+                            ${payment.status}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm font-mono">${payment.ghl_contact_id}</td>
+                    <td class="px-4 py-3 text-sm">${new Date(payment.created_at).toLocaleDateString()}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <button onclick="viewPayment(${payment.id})" class="text-blue-600 hover:text-blue-800 mr-2">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${payment.status === 'pending' ? `
+                            <button onclick="approvePayment(${payment.id})" class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Obtener clase CSS para estado
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'bg-yellow-100 text-yellow-800',
+                'approved': 'bg-green-100 text-green-800',
+                'rejected': 'bg-red-100 text-red-800',
+                'cancelled': 'bg-gray-100 text-gray-800'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        // Generar link de pago
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('generatePaymentBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generando...';
+            btn.disabled = true;
+
+            try {
+                const formData = {
+                    customer_email: document.getElementById('customerEmail').value,
+                    customer_name: document.getElementById('customerName').value,
+                    amount: parseFloat(document.getElementById('amount').value),
+                    ghl_contact_id: document.getElementById('ghlContactId').value,
+                    description: document.getElementById('description').value,
+                    created_by: `client_dashboard_${currentClientId}`,
+                    client_id: currentClientId
+                };
+
+                const response = await fetch('/api/v1/payments/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Mostrar resultado
+                    document.getElementById('resultPaymentId').textContent = data.payment_id;
+                    document.getElementById('resultCheckoutUrl').value = data.checkout_url;
+                    document.getElementById('paymentResult').classList.remove('hidden');
+                    
+                    // Limpiar formulario
+                    document.getElementById('paymentForm').reset();
+                    
+                    // Actualizar métricas y pagos
+                    await loadClientMetrics();
+                    await loadClientPayments();
+                    
+                } else {
+                    const error = await response.json();
+                    alert(`Error generando pago: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generando link de pago');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Probar conexión GHL
+        document.getElementById('testGhlBtn').addEventListener('click', async function() {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Probando...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`/oauth/ghl/test/${currentClientId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                const data = await response.json();
+                const resultDiv = document.getElementById('ghlTestResult');
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">
+                                <i class="fas fa-check-circle mr-2"></i>Conexión Exitosa
+                            </h4>
+                            <p class="text-sm text-green-700">${data.message}</p>
+                            ${data.mode ? `<p class="text-xs text-green-600 mt-1">Modo: ${data.mode}</p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-red-800 mb-2">
+                                <i class="fas fa-times-circle mr-2"></i>Error de Conexión
+                            </h4>
+                            <p class="text-sm text-red-700">${data.error}</p>
+                        </div>
+                    `;
+                }
+                
+                resultDiv.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('ghlTestResult').innerHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-red-800 mb-2">Error</h4>
+                        <p class="text-sm text-red-700">Error probando conexión</p>
+                    </div>
+                `;
+                document.getElementById('ghlTestResult').classList.remove('hidden');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Funciones auxiliares
+        function updateLastUpdate() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            
+            // Mostrar feedback visual
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                button.innerHTML = originalText;
+            }, 1000);
+        }
+
+        function refreshPayments() {
+            loadClientPayments();
+        }
+
+        function viewPayment(paymentId) {
+            // Implementar vista detallada del pago
+            alert(`Ver detalles del pago ${paymentId}`);
+        }
+
+        function approvePayment(paymentId) {
+            // Implementar aprobación de pago
+            if (confirm(`¿Aprobar pago ${paymentId}?`)) {
+                // Llamar API de aprobación
+                alert(`Pago ${paymentId} aprobado (funcionalidad pendiente)`);
+            }
+        }
+
+        // Inicializar cuando cargue la página
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>
