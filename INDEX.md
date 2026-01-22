@@ -399,3 +399,47 @@ MercadoPago Enterprise Multi-tenant
 **Documentos totales:** 8 principales + documentación técnica  
 **Cobertura:** 100% del sistema  
 **Estado:** ✅ PRODUCCIÓN READY
+
+## 🎯 **SPRINT 2 - AUTOMATIZACIÓN DE TAGS GHL Y NOTIFICACIONES VENDEDOR**
+
+### **📋 Documentación del Sprint 2**
+- [`SPRINT2_TAGGING_GHL_COMPLETADO.md`](SPRINT2_TAGGING_GHL_COMPLETADO.md) - **Automatización completa de tags en GoHighLevel**
+- [`SPRINT2_MVP_NOTIFICACIONES_COMPLETADO.md`](SPRINT2_MVP_NOTIFICACIONES_COMPLETADO.md) - **MVP Notificaciones para Vendedor**
+
+### **🧪 Scripts del Sprint 2**
+- `scripts/simulate_ghl_tagging.py` - Simulador del flujo de tagging automático
+- `scripts/update_db_for_tagging.py` - Migración de BD para soporte de tags
+- `scripts/setup_vendor_notifications.py` - Configuración sistema notificaciones vendedor
+- `scripts/test_vendor_notifications.py` - Prueba integración completa notificaciones
+
+### **🔧 Funcionalidades Implementadas**
+
+#### **🏷️ Sistema de Tagging GHL**
+- ✅ **GHL Tag Logic** integrada en notification_service.py
+- ✅ **Tag específico** configurable por cliente (default_tag_paid)
+- ✅ **Logs de eventos** completos con PaymentEvent
+- ✅ **Simulador funcional** para testing y demostración
+
+#### **📧 Sistema de Notificaciones Vendedor**
+- ✅ **Disparador único** desde backend post-webhook MercadoPago
+- ✅ **Endpoint dashboard** GET /api/notifications/ con datos JSON
+- ✅ **Email SMTP simple** en texto plano (Asunto: Pago aprobado – RP PAY)
+- ✅ **Protección anti-duplicados** con tabla PaymentEvent
+- ✅ **Prueba de integración** completa: Pago -> Tag GHL -> Dashboard -> Email
+
+### **🎯 Casos de Uso Soportados**
+- **Agencias:** Tags personalizados + notificaciones por cliente
+- **SaaS:** Notificaciones automáticas por plan de suscripción
+- **Resellers:** Sistema completo white-label con notificaciones
+
+### **📊 APIs Nuevas**
+- `GET /api/notifications/` - Lista notificaciones recientes para dashboard
+- `GET /api/notifications/stats` - Estadísticas del sistema de notificaciones
+
+### **🗄️ Base de Datos**
+- **Tabla:** `payment_events` - Tracking de eventos y protección anti-duplicados
+- **Campo:** `client_accounts.default_tag_paid` - Tag personalizable por cliente
+
+---
+
+**🏆 SPRINT 2 COMPLETADO EXITOSAMENTE - 21 de Enero, 2026**
